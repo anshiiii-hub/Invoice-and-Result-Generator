@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Page Copy Report | Invoice & Academic Marksheet Generator</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef7ff',
+                            100: '#dcefff',
+                            500: '#3BA4E8',
+                            600: '#1a7bc4',
+                            700: '#145f98',
+                            900: '#0a1220',
+                        }
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        fadeUp: {
+                            '0%': { opacity: 0, transform: 'translateY(24px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #f7fbff;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(59, 164, 232, 0.16) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(26, 123, 196, 0.12) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(14, 165, 233, 0.12) 0px, transparent 50%);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.74);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.72);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.68);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.9);
+            box-shadow: 0 14px 50px rgba(15, 23, 42, 0.06);
+        }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen relative overflow-x-hidden">
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-[-8%] left-[-8%] w-96 h-96 rounded-full bg-brand-500/20 blur-[110px] animate-float"></div>
+        <div class="absolute top-[16%] right-[-8%] w-[28rem] h-[28rem] rounded-full bg-cyan-400/15 blur-[110px] animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-[-14%] left-[18%] w-[32rem] h-[32rem] rounded-full bg-sky-400/15 blur-[120px] animate-float" style="animation-delay: 4s;"></div>
+    </div>
+
+    <header class="fixed top-0 w-full z-50 glass border-b border-white/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            <a href="{{ url_for('home') }}" class="flex items-center gap-3 group">
+                <div class="w-11 h-11 rounded-2xl bg-gradient-to-br from-brand-600 to-slate-900 flex items-center justify-center text-white font-bold shadow-lg shadow-brand-500/20 group-hover:scale-105 transition-transform">
+                    AS
+                </div>
+                <div>
+                    <h1 class="font-display font-bold text-xl text-slate-900 leading-tight">Page <span class="text-brand-600">Report</span></h1>
+                    <p class="text-[10px] font-semibold tracking-[0.24em] text-slate-500 uppercase">Invoice & Marksheet UI copy</p>
+                </div>
+            </a>
+
+            <div class="flex items-center gap-3">
+                <a href="{{ url_for('home') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-full border border-slate-200 bg-white/80 text-slate-700 text-sm font-semibold hover:bg-slate-50 transition-colors">
+                    <i class="ph-bold ph-house"></i> Home
+                </a>
+                <a href="{{ url_for('index') }}" class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 text-white text-sm font-semibold hover:bg-brand-600 transition-colors shadow-lg shadow-slate-900/10">
+                    Workspace <i class="ph-bold ph-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-28 pb-20">
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 animate-fade-up">
+            <div class="grid lg:grid-cols-[1.2fr_0.8fr] gap-6 items-end">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-50 border border-brand-100 text-brand-700 text-xs font-bold uppercase tracking-widest mb-4">
+                        <i class="ph-fill ph-file-text"></i> Detailed Page Copy Report
+                    </div>
+                    <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 tracking-tight leading-tight mb-4">
+                        What each page says, and where it appears.
+                    </h2>
+                    <p class="text-slate-600 max-w-3xl text-lg leading-relaxed">
+                        This report documents the visible copy on the landing page and workspace page. Each section lists the page, the element, the text written there, and a short note explaining its role.
+                    </p>
+                </div>
+
+                <div class="glass-card rounded-[2rem] p-6 md:p-7">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="rounded-2xl bg-slate-50 p-4 border border-slate-200/70">
+                            <div class="text-xs uppercase tracking-widest text-slate-500 font-bold">Pages</div>
+                            <div class="mt-2 text-3xl font-bold text-slate-900">{{ report.page_count }}</div>
+                        </div>
+                        <div class="rounded-2xl bg-brand-50 p-4 border border-brand-100">
+                            <div class="text-xs uppercase tracking-widest text-brand-700 font-bold">Elements</div>
+                            <div class="mt-2 text-3xl font-bold text-brand-700">{{ report.item_count }}</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 rounded-2xl bg-slate-900 text-white p-4">
+                        <div class="text-xs uppercase tracking-widest text-slate-300 font-bold mb-1">Generated</div>
+                        <div class="font-mono text-sm">{{ report.generated_at }}</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+            {% for page in report.pages %}
+            <article class="glass-card rounded-[2rem] overflow-hidden animate-fade-up" style="animation-delay: {{ loop.index0 * 120 }}ms;">
+                <div class="p-6 md:p-8 border-b border-slate-200/80 bg-white/70">
+                    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-5">
+                        <div>
+                            <div class="flex flex-wrap items-center gap-3 mb-3">
+                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider border border-brand-100">
+                                    {{ page.label }}
+                                </span>
+                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-600 text-xs font-bold uppercase tracking-wider border border-slate-200">
+                                    {{ page.page_name }}
+                                </span>
+                                <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-900 text-white text-xs font-bold uppercase tracking-wider">
+                                    Route {{ page.route }}
+                                </span>
+                            </div>
+                            <h3 class="font-display text-2xl md:text-3xl font-bold text-slate-900">{{ page.summary }}</h3>
+                        </div>
+                        <div class="text-sm text-slate-500 max-w-xl lg:text-right">
+                            The table below lists each visible element and the exact text currently written on that page.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-6 md:p-8">
+                    <div class="overflow-x-auto rounded-2xl border border-slate-200/80 bg-white">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-900 text-white text-xs uppercase tracking-[0.2em]">
+                                    <th class="p-4 font-bold">Element</th>
+                                    <th class="p-4 font-bold">Written text</th>
+                                    <th class="p-4 font-bold">What it does</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-200">
+                                {% for item in page["items"] %}
+                                <tr class="align-top hover:bg-slate-50/80 transition-colors">
+                                    <td class="p-4 w-1/4">
+                                        <div class="font-semibold text-slate-900">{{ item.element }}</div>
+                                    </td>
+                                    <td class="p-4 w-1/2">
+                                        <div class="text-slate-700 leading-relaxed">{{ item.text }}</div>
+                                    </td>
+                                    <td class="p-4 w-1/4 text-slate-600 leading-relaxed">{{ item.notes }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+        </section>
+
+        <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8">
+            <div class="glass-card rounded-[2rem] p-6 md:p-8 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+                <div>
+                    <h3 class="font-display text-2xl font-bold text-slate-900 mb-2">Need the live workspace instead?</h3>
+                    <p class="text-slate-600 max-w-2xl">Jump back to the generator page to edit invoice and marksheet data, then come back here to review the page copy report.</p>
+                </div>
+                <div class="flex flex-wrap gap-3">
+                    <a href="{{ url_for('home') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-white border border-slate-200 text-slate-700 font-semibold hover:bg-slate-50 transition-colors">
+                        <i class="ph-bold ph-house"></i> Home
+                    </a>
+                    <a href="{{ url_for('index') }}" class="inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-brand-600 text-white font-semibold hover:bg-brand-700 transition-colors shadow-lg shadow-brand-500/20">
+                        Open Workspace <i class="ph-bold ph-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

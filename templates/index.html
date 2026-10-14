@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="indigo">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anshita's Document Studio</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: 'var(--brand-50)',
+                            100: 'var(--brand-100)',
+                            500: 'var(--brand-500)',
+                            600: 'var(--brand-600)',
+                            700: 'var(--brand-700)',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'fade-in': 'fadeIn 0.4s ease-out forwards',
+                        'slide-up': 'slideUp 0.5s ease-out forwards',
+                        'pulse-fast': 'pulse 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slight': 'bounceSlight 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        bounceSlight: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-5px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* CSS Variables for Dynamic Theming */
+        :root[data-theme="indigo"] {
+            --brand-50: #eafaff; --brand-100: #c8f3fb; 
+            --brand-500: #00a7c8; --brand-600: #087f9c; --brand-700: #075f75;
+            --blob-color: hsla(190,100%,46%,0.16);
+        }
+        :root[data-theme="rose"] {
+            --brand-50: #fff1f2; --brand-100: #ffe4e6; 
+            --brand-500: #f43f5e; --brand-600: #e11d48; --brand-700: #be123c;
+            --blob-color: hsla(343,100%,76%,0.15);
+        }
+        :root[data-theme="emerald"] {
+            --brand-50: #ecfdf5; --brand-100: #d1fae5; 
+            --brand-500: #10b981; --brand-600: #059669; --brand-700: #047857;
+            --blob-color: hsla(152,100%,74%,0.15);
+        }
+        :root[data-theme="violet"] {
+            --brand-50: #f5f3ff; --brand-100: #ede9fe; 
+            --brand-500: #8b5cf6; --brand-600: #7c3aed; --brand-700: #6d28d9;
+            --blob-color: hsla(262,100%,74%,0.15);
+        }
+
+        body {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 40% 20%, var(--blob-color) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(355,100%,93%,0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 50%, hsla(340,100%,76%,0.15) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(22,100%,77%,0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 100%, hsla(242,100%,70%,0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+            transition: background-image 0.5s ease;
+        }
+
+        /* Glassmorphism utilities */
+        .glass {
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            transition: all 0.3s ease;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Hide number input arrows */
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+
+        /* Drag and Drop Zone */
+        .dropzone-active {
+            border-color: var(--brand-600) !important;
+            background-color: var(--brand-50) !important;
+            transform: scale(1.02);
+        }
+
+        /* Highlight animation for calculations */
+        @keyframes highlightVal {
+            0% { color: #10b981; transform: scale(1.05); }
+            100% { color: inherit; transform: scale(1); }
+        }
+        .val-updated { animation: highlightVal 0.5s ease; }
+    </style>
+</head>
+<body class="text-slate-800 min-h-screen flex flex-col relative overflow-x-hidden">
+
+    <!-- Background Animated Blobs -->
+    <div class="fixed inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-0 left-1/4 w-96 h-96 bg-brand-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob transition-colors duration-500"></div>
+        <div class="absolute top-0 right-1/4 w-96 h-96 bg-cyan-400 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div class="absolute -bottom-32 left-1/2 w-96 h-96 bg-brand-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000 transition-colors duration-500"></div>
+    </div>
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 glass border-b border-slate-200/50 shadow-sm">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex flex-wrap items-center justify-between gap-4">
+            
+            <!-- Personalized User Area -->
+            <div class="flex items-center gap-3">
+                <div id="user-avatar" class="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-brand-500/30 transition-colors duration-500">
+                    S
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg leading-tight flex items-center gap-2">
+                        Anshita's Studio
+                    </h1>
+                    <div class="text-xs font-medium text-slate-500 flex items-center gap-1 mt-0.5">
+                        <span id="greeting-time">Good day,</span> 
+                        <span contenteditable="true" id="user-name" title="Click to edit your name" class="text-brand-600 font-bold px-1 rounded hover:bg-brand-50 transition-colors outline-none focus:ring-2 focus:ring-brand-500 cursor-text">Student</span>
+                        <span id="greeting-day" class="hidden sm:inline opacity-75">| Ready to automate?</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tools & Theme -->
+            <div class="flex items-center gap-4">
+                <!-- Theme Picker -->
+                <div class="hidden sm:flex items-center gap-2 bg-white/50 px-2 py-1.5 rounded-full border border-slate-200/60 shadow-sm backdrop-blur-md">
+                    <button onclick="setTheme('indigo')" class="w-5 h-5 rounded-full bg-indigo-500 hover:scale-110 transition-transform ring-2 ring-transparent focus:ring-indigo-300" title="Indigo"></button>
+                    <button onclick="setTheme('rose')" class="w-5 h-5 rounded-full bg-rose-500 hover:scale-110 transition-transform ring-2 ring-transparent focus:ring-rose-300" title="Rose"></button>
+                    <button onclick="setTheme('emerald')" class="w-5 h-5 rounded-full bg-emerald-500 hover:scale-110 transition-transform ring-2 ring-transparent focus:ring-emerald-300" title="Emerald"></button>
+                    <button onclick="setTheme('violet')" class="w-5 h-5 rounded-full bg-violet-500 hover:scale-110 transition-transform ring-2 ring-transparent focus:ring-violet-300" title="Violet"></button>
+                </div>
+
+                <div class="flex items-center gap-2 bg-white/50 px-3 py-1.5 rounded-full border border-slate-200/60 shadow-sm text-xs font-semibold text-slate-600 hover:shadow-md transition-shadow">
+                    <i class="ph-fill ph-student text-brand-500"></i>
+                    Advanced Project
+                </div>
+
+                <a href="{{ url_for('home') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-slate-200 bg-white/70 text-slate-700 text-xs font-bold uppercase tracking-wider hover:bg-white transition-colors">
+                    <i class="ph-bold ph-house"></i> Home
+                </a>
+
+                <a href="{{ url_for('page_report') }}" class="hidden sm:inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-brand-200 bg-brand-50 text-brand-700 text-xs font-bold uppercase tracking-wider hover:bg-brand-100 transition-colors">
+                    <i class="ph-bold ph-file-text"></i> Page Report
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 flex flex-col gap-8">
+        
+        <section class="grid lg:grid-cols-[1.25fr_0.75fr] gap-6 items-stretch">
+            <div class="glass-panel rounded-2xl p-6 md:p-8 shadow-sm">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-50 text-brand-700 border border-brand-100 text-xs font-bold uppercase tracking-wider mb-4">
+                    <i class="ph-fill ph-sparkle"></i> Anshita's Personal Workspace
+                </div>
+                <h2 class="text-3xl md:text-4xl font-bold tracking-tight text-slate-900 mb-3">Invoice and result generation, now wired like a real product.</h2>
+                <p class="text-slate-600 leading-relaxed max-w-3xl">Use the workspace to calculate totals, build ranked class results, generate actual PDF and Excel files from Flask, and present the project with a dedicated home page plus page report.</p>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <div class="glass-panel rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-bold uppercase tracking-wider text-slate-500">Exports</div>
+                    <div class="mt-2 text-3xl font-bold text-slate-900">PDF</div>
+                    <div class="mt-1 text-xs text-slate-500">Invoices and marksheets</div>
+                </div>
+                <div class="glass-panel rounded-2xl p-5 shadow-sm">
+                    <div class="text-xs font-bold uppercase tracking-wider text-slate-500">Reports</div>
+                    <div class="mt-2 text-3xl font-bold text-slate-900">XLSX</div>
+                    <div class="mt-1 text-xs text-slate-500">Class summaries</div>
+                </div>
+                <div class="glass-panel rounded-2xl p-5 shadow-sm col-span-2">
+                    <div class="flex items-center justify-between gap-4">
+                        <div>
+                            <div class="text-xs font-bold uppercase tracking-wider text-slate-500">Brand</div>
+                            <div class="mt-1 text-xl font-bold text-brand-700">Anshita's Document Studio</div>
+                        </div>
+                        <div class="w-12 h-12 rounded-xl bg-slate-900 text-white flex items-center justify-center font-bold">AS</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tab Navigation -->
+        <div class="flex justify-center">
+            <div class="glass-panel p-1.5 rounded-2xl inline-flex gap-1 shadow-sm border border-white">
+                <button onclick="switchTab('invoice')" id="tab-invoice" class="tab-btn active px-6 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all bg-white shadow-sm text-brand-600 ring-1 ring-slate-900/5">
+                    <i class="ph-duotone ph-receipt text-lg"></i> Invoices
+                </button>
+                <button onclick="switchTab('marksheet')" id="tab-marksheet" class="tab-btn px-6 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 transition-all text-slate-500 hover:text-slate-700 hover:bg-white/50">
+                    <i class="ph-duotone ph-graduation-cap text-lg"></i> Marksheets
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= INVOICE MODULE ================= -->
+        <div id="module-invoice" class="module-content animate-fade-in flex flex-col gap-6">
+            
+            <!-- Mode Toggle & Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 glass p-4 rounded-2xl">
+                <div>
+                    <h2 class="text-lg font-bold flex items-center gap-2 text-slate-800"><i class="ph-fill ph-receipt text-brand-500"></i> Invoice Generator</h2>
+                    <p class="text-sm text-slate-500">Create branded, tax-aware invoice PDFs with live totals.</p>
+                </div>
+                <div class="bg-slate-100 p-1 rounded-lg flex inline-flex ring-1 ring-slate-200">
+                    <button onclick="setMode('invoice', 'manual')" id="inv-mode-manual" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-white shadow-sm text-slate-800 transition-all">Manual Entry</button>
+                    <button onclick="setMode('invoice', 'bulk')" id="inv-mode-bulk" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-700 transition-all">Bulk Upload</button>
+                </div>
+            </div>
+
+            <!-- Manual Entry View -->
+            <div id="inv-view-manual" class="flex flex-col gap-6 animate-slide-up">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Company Card -->
+                    <div class="glass-panel p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-buildings text-brand-400"></i> From (Company)</h3>
+                            <span class="text-[10px] bg-brand-100 text-brand-600 px-2 py-0.5 rounded-full font-semibold animate-pulse-fast">Auto-saved</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Company Name</label>
+                                <input type="text" id="inv-co-name" value="Anshita's Document Studio" placeholder="Enter your company name" class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Email Address</label>
+                                <input type="email" id="inv-co-email" value="your-email@example.com" class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Client Card -->
+                    <div class="glass-panel p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2"><i class="ph-fill ph-user text-brand-400"></i> To (Client)</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="col-span-2">
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Client Name</label>
+                                <input type="text" id="inv-cl-name" value="Tech Innovations Ltd." class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Invoice #</label>
+                                <input type="text" id="inv-no" value="INV-001" class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Date</label>
+                                <input type="date" id="inv-date" class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Line Items Card -->
+                <div class="glass-panel rounded-2xl shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white/40">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-list-dashes text-brand-400"></i> Line Items</h3>
+                        <button onclick="addInvoiceRow()" class="text-sm font-semibold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                            <i class="ph-bold ph-plus"></i> Add Item
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="bg-slate-50/50 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    <th class="p-4 w-1/2">Description</th>
+                                    <th class="p-4 w-24">Qty</th>
+                                    <th class="p-4 w-32">Rate (₹)</th>
+                                    <th class="p-4 w-24">Tax %</th>
+                                    <th class="p-4 w-12"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="invoice-items" class="divide-y divide-slate-100">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Summary Footer -->
+                    <div class="p-6 bg-slate-50/80 flex justify-end">
+                        <div class="w-full sm:w-72 space-y-3">
+                            <div class="flex justify-between text-sm text-slate-500">
+                                <span>Subtotal</span>
+                                <span id="inv-subtotal" class="font-mono font-medium">₹ 0.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm text-slate-500">
+                                <span>Tax</span>
+                                <span id="inv-tax" class="font-mono font-medium">₹ 0.00</span>
+                            </div>
+                            <div class="pt-3 border-t border-slate-200 flex justify-between items-center">
+                                <span class="font-bold text-slate-800">Total</span>
+                                <span id="inv-total" class="font-mono text-xl font-bold text-brand-600">₹ 0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Upload View (Invoice) -->
+            <div id="inv-view-bulk" class="hidden animate-slide-up">
+                <div class="glass-panel p-8 rounded-2xl shadow-sm text-center">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">Bulk Upload Invoices</h3>
+                    
+                    <div id="inv-dropzone" class="border-2 border-dashed border-slate-300 rounded-2xl p-12 transition-all cursor-pointer hover:border-brand-400 hover:bg-brand-50/50 flex flex-col items-center justify-center gap-4">
+                        <div class="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl mb-2 shadow-inner group-hover:scale-110 transition-transform">
+                            <i class="ph-duotone ph-file-csv animate-bounce-slight"></i>
+                        </div>
+                        <div>
+                            <p class="text-base font-bold text-slate-700">Drag & drop your file here</p>
+                            <p class="text-sm text-slate-500 mt-1">Supports CSV, Excel, or PDF</p>
+                        </div>
+                        <input type="file" id="inv-file" class="hidden" accept=".csv, .xlsx, .pdf">
+                        <button onclick="document.getElementById('inv-file').click()" class="mt-4 px-5 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm transition-all hover:-translate-y-0.5">
+                            Browse Files
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Action Area -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-2">
+                <button onclick="resetInvoice()" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 flex items-center justify-center gap-2 transition-colors">
+                    <i class="ph-bold ph-arrow-counter-clockwise"></i> Clear Data
+                </button>
+                <button id="btn-gen-inv" onclick="generateDocument('invoice')" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <i class="ph-bold ph-magic-wand"></i> Generate Invoice PDF
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress-inv" class="hidden w-full bg-slate-200 rounded-full h-2 mt-4 overflow-hidden shadow-inner">
+                <div class="bg-brand-500 h-2 rounded-full w-0 transition-all duration-300 ease-out relative">
+                    <div class="absolute inset-0 bg-white/30 animate-pulse"></div>
+                </div>
+            </div>
+
+            <!-- Result Area -->
+            <div id="result-inv" class="hidden animate-slide-up mt-4">
+                <div class="glass p-6 rounded-2xl border border-green-200 bg-green-50/50">
+                    <h3 class="text-green-800 font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-check-circle text-green-500 text-xl"></i> Generation Successful</h3>
+                    <div id="download-inv" class="grid gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ================= MARKSHEET MODULE ================= -->
+        <div id="module-marksheet" class="hidden module-content flex flex-col gap-6">
+            
+            <!-- Mode Toggle & Header -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 glass p-4 rounded-2xl">
+                <div>
+                    <h2 class="text-lg font-bold flex items-center gap-2 text-slate-800"><i class="ph-fill ph-graduation-cap text-brand-500"></i> Marksheet Generator</h2>
+                    <p class="text-sm text-slate-500">Generate ranked marksheets and Excel class summaries.</p>
+                </div>
+                <div class="bg-slate-100 p-1 rounded-lg flex inline-flex ring-1 ring-slate-200">
+                    <button onclick="setMode('marksheet', 'manual')" id="ms-mode-manual" class="px-3 py-1.5 text-xs font-semibold rounded-md bg-white shadow-sm text-slate-800 transition-all">Manual Entry</button>
+                    <button onclick="setMode('marksheet', 'bulk')" id="ms-mode-bulk" class="px-3 py-1.5 text-xs font-semibold rounded-md text-slate-500 hover:text-slate-700 transition-all">Bulk Upload</button>
+                </div>
+            </div>
+
+            <!-- Manual Entry View -->
+            <div id="ms-view-manual" class="flex flex-col gap-6 animate-slide-up">
+                
+                <!-- Setup Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Institution Info -->
+                    <div class="glass-panel p-6 rounded-2xl shadow-sm">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-bank text-brand-400"></i> Institution</h3>
+                            <span class="text-[10px] bg-brand-100 text-brand-600 px-2 py-0.5 rounded-full font-semibold animate-pulse-fast">Auto-saved</span>
+                        </div>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-medium text-slate-500 mb-1">Institution Name</label>
+                                <input type="text" id="ms-inst" value="Anshita's Learning Studio" placeholder="Enter institution name" class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                            </div>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">Term</label>
+                                    <input type="text" value="Spring 2026" class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-slate-500 mb-1">Max Marks / Sub</label>
+                                    <input type="number" id="ms-max-marks" value="100" class="w-full bg-white/70 border border-slate-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500/20 focus:border-brand-500 transition-all">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Subjects Info -->
+                    <div class="glass-panel p-6 rounded-2xl shadow-sm flex flex-col">
+                        <div class="flex justify-between items-center mb-4">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-books text-brand-400"></i> Subjects</h3>
+                            <button onclick="addSubject()" class="text-xs font-bold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-2 py-1 rounded-md transition-colors flex items-center gap-1">
+                                <i class="ph-bold ph-plus"></i> Add
+                            </button>
+                        </div>
+                        <div class="overflow-y-auto max-h-[140px] pr-2 space-y-2 flex-grow" id="subject-list">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Students Data -->
+                <div class="glass-panel rounded-2xl shadow-sm overflow-hidden">
+                    <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-white/40">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2"><i class="ph-fill ph-users text-brand-400"></i> Student Data</h3>
+                        <button onclick="addStudent()" class="text-sm font-semibold text-brand-600 hover:text-brand-700 bg-brand-50 hover:bg-brand-100 px-3 py-1.5 rounded-lg transition-colors flex items-center gap-1">
+                            <i class="ph-bold ph-plus"></i> Add Student
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr id="ms-table-headers" class="bg-slate-50/50 text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                                    <th class="p-4 w-32">Roll No</th>
+                                    <th class="p-4">Name</th>
+                                    <!-- Dynamic Subject Headers go here -->
+                                    <th class="p-4 w-12"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="student-items" class="divide-y divide-slate-100">
+                                <!-- Rows generated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bulk Upload View (Marksheet) -->
+            <div id="ms-view-bulk" class="hidden animate-slide-up">
+                <div class="glass-panel p-8 rounded-2xl shadow-sm text-center">
+                    <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-6">Upload Class Roster</h3>
+                    
+                    <div id="ms-dropzone" class="border-2 border-dashed border-slate-300 rounded-2xl p-12 transition-all cursor-pointer hover:border-brand-400 hover:bg-brand-50/50 flex flex-col items-center justify-center gap-4">
+                        <div class="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl mb-2 shadow-inner group-hover:scale-110 transition-transform">
+                            <i class="ph-duotone ph-microsoft-excel-logo animate-bounce-slight"></i>
+                        </div>
+                        <div>
+                            <p class="text-base font-bold text-slate-700">Drop your Excel/CSV here</p>
+                            <p class="text-sm text-slate-500 mt-1">First row should contain column headers</p>
+                        </div>
+                        <input type="file" id="ms-file" class="hidden" accept=".csv, .xlsx">
+                        <button onclick="document.getElementById('ms-file').click()" class="mt-4 px-5 py-2 bg-white border border-slate-200 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-50 shadow-sm transition-all hover:-translate-y-0.5">
+                            Browse Files
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generate Action Area -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 mt-2">
+                <button onclick="resetMarksheet()" class="w-full sm:w-auto px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700 flex items-center justify-center gap-2 transition-colors">
+                    <i class="ph-bold ph-arrow-counter-clockwise"></i> Clear Data
+                </button>
+                <button id="btn-gen-ms" onclick="generateDocument('marksheet')" class="w-full sm:w-auto px-8 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold shadow-lg shadow-brand-500/30 transition-all hover:-translate-y-0.5 flex items-center justify-center gap-2">
+                    <i class="ph-bold ph-files"></i> Generate Reports
+                </button>
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress-ms" class="hidden w-full bg-slate-200 rounded-full h-2 mt-4 overflow-hidden shadow-inner">
+                <div class="bg-brand-500 h-2 rounded-full w-0 transition-all duration-300 ease-out relative">
+                    <div class="absolute inset-0 bg-white/30 animate-pulse"></div>
+                </div>
+            </div>
+
+            <!-- Result Area -->
+            <div id="result-ms" class="hidden animate-slide-up mt-4">
+                
+                <!-- Preview Table -->
+                <div class="glass-panel p-6 rounded-2xl mb-4 overflow-x-auto">
+                    <h3 class="text-sm font-bold text-slate-600 mb-4 flex items-center gap-2"><i class="ph-fill ph-chart-bar text-brand-500 text-xl"></i> Class Performance Preview</h3>
+                    <table class="w-full text-left border-collapse text-sm">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-600">
+                                <th class="p-2 rounded-l-lg font-semibold">Roll No</th>
+                                <th class="p-2 font-semibold">Name</th>
+                                <th class="p-2 font-semibold">Total Score</th>
+                                <th class="p-2 font-semibold">Percentage</th>
+                                <th class="p-2 rounded-r-lg font-semibold">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ms-preview-body" class="divide-y divide-slate-100">
+                            <!-- Populated by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Downloads -->
+                <div class="glass p-6 rounded-2xl border border-green-200 bg-green-50/50">
+                    <h3 class="text-green-800 font-bold mb-4 flex items-center gap-2"><i class="ph-fill ph-check-circle text-green-500 text-xl"></i> Reports Generated</h3>
+                    <div id="download-ms" class="grid sm:grid-cols-2 gap-3">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="mt-auto py-8 text-center text-sm text-slate-500 relative z-10 border-t border-slate-200/50 glass">
+        <p>Anshita's Document Studio</p>
+        <p class="text-xs mt-1">Advanced invoice and result generator with real PDF/XLSX exports</p>
+    </footer>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
+
+    <script>
+        // === State Management ===
+        let subjects = ['CS101', 'MA101']; // Initial subjects for marksheet
+
+        // === Initialization ===
+        window.addEventListener('DOMContentLoaded', () => {
+            initPersonalization();
+            initDate();
+            
+            // Initialize default rows
+            addInvoiceRow('Web Development Service', 1, 15000, 18);
+            addInvoiceRow('Cloud Hosting (1 Year)', 1, 4500, 18);
+            
+            updateSubjectList();
+            addStudent('2026-001', 'Alice Johnson', [85, 92]);
+            addStudent('2026-002', 'Bob Smith', [72, 68]);
+
+            setupDragAndDrop('inv');
+            setupDragAndDrop('ms');
+        });
+
+        // === UI & UX Utilities ===
+        function initPersonalization() {
+            // 1. Time & Day Greeting
+            const date = new Date();
+            const hour = date.getHours();
+            let greeting = 'Good evening,';
+            if (hour < 12) greeting = 'Good morning,';
+            else if (hour < 18) greeting = 'Good afternoon,';
+            document.getElementById('greeting-time').innerText = greeting;
+
+            const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+            const dayName = days[date.getDay()];
+            const dayMessages = {
+                'Monday': 'Ready to conquer the week?',
+                'Friday': 'Finish strong today!',
+                'Sunday': 'Hope your Sunday is going well!'
+            };
+            document.getElementById('greeting-day').innerText = `| ${dayMessages[dayName] || `Happy ${dayName}!`}`;
+
+            // 2. Load Saved Name & Avatar
+            const nameEl = document.getElementById('user-name');
+            const savedName = localStorage.getItem('studentName') || 'Student';
+            nameEl.innerText = savedName;
+            updateAvatar(savedName);
+
+            nameEl.addEventListener('blur', () => {
+                const newName = nameEl.innerText.trim() || 'Student';
+                localStorage.setItem('studentName', newName);
+                updateAvatar(newName);
+            });
+            nameEl.addEventListener('keydown', (e) => {
+                if(e.key === 'Enter') { e.preventDefault(); nameEl.blur(); }
+            });
+
+            // 3. Load Saved Theme
+            const savedTheme = localStorage.getItem('workspaceTheme') || 'indigo';
+            setTheme(savedTheme, false);
+
+            // 4. Load Saved Forms & View State
+            const savedCoName = localStorage.getItem('companyName');
+            if(savedCoName) document.getElementById('inv-co-name').value = savedCoName;
+            
+            const savedInstName = localStorage.getItem('instName');
+            if(savedInstName) document.getElementById('ms-inst').value = savedInstName;
+
+            document.getElementById('inv-co-name').addEventListener('input', (e) => localStorage.setItem('companyName', e.target.value));
+            document.getElementById('ms-inst').addEventListener('input', (e) => localStorage.setItem('instName', e.target.value));
+
+            const activeTab = localStorage.getItem('activeTab') || 'invoice';
+            switchTab(activeTab, false);
+
+            const activeInvMode = localStorage.getItem('mode_invoice') || 'manual';
+            setMode('invoice', activeInvMode, false);
+
+            const activeMsMode = localStorage.getItem('mode_marksheet') || 'manual';
+            setMode('marksheet', activeMsMode, false);
+        }
+
+        function updateAvatar(name) {
+            const avatar = document.getElementById('user-avatar');
+            const initials = name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            avatar.innerText = initials || 'S';
+        }
+
+        function setTheme(theme, showNotice = true) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('workspaceTheme', theme);
+            if(showNotice) showToast(`Workspace theme set to ${theme}`, 'info');
+        }
+
+        function initDate() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('inv-date').value = today;
+        }
+
+        function switchTab(tabId, save = true) {
+            if(save) localStorage.setItem('activeTab', tabId);
+            
+            // Update buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-white', 'text-brand-600', 'shadow-sm', 'ring-1', 'ring-slate-900/5');
+                btn.classList.add('text-slate-500');
+            });
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            if(activeBtn) {
+                activeBtn.classList.remove('text-slate-500');
+                activeBtn.classList.add('active', 'bg-white', 'text-brand-600', 'shadow-sm', 'ring-1', 'ring-slate-900/5');
+            }
+
+            // Update content views
+            document.querySelectorAll('.module-content').forEach(mod => mod.classList.add('hidden'));
+            const targetMod = document.getElementById(`module-${tabId}`);
+            if(targetMod) targetMod.classList.remove('hidden');
+        }
+
+        function setMode(module, mode, save = true) {
+            if(save) localStorage.setItem(`mode_${module}`, mode);
+
+            // Update toggle buttons
+            const btnManual = document.getElementById(`${module === 'invoice' ? 'inv' : 'ms'}-mode-manual`);
+            const btnBulk = document.getElementById(`${module === 'invoice' ? 'inv' : 'ms'}-mode-bulk`);
+            
+            [btnManual, btnBulk].forEach(btn => {
+                if(!btn) return;
+                btn.classList.remove('bg-white', 'shadow-sm', 'text-slate-800');
+                btn.classList.add('text-slate-500');
+            });
+
+            if(mode === 'manual' && btnManual) {
+                btnManual.classList.add('bg-white', 'shadow-sm', 'text-slate-800');
+                btnManual.classList.remove('text-slate-500');
+                document.getElementById(`${module === 'invoice' ? 'inv' : 'ms'}-view-manual`).classList.remove('hidden');
+                document.getElementById(`${module === 'invoice' ? 'inv' : 'ms'}-view-bulk`).classList.add('hidden');
+            } else if (btnBulk) {
+                btnBulk.classList.add('bg-white', 'shadow-sm', 'text-slate-800');
+                btnBulk.classList.remove('text-slate-500');
+                document.getElementById(`${module === 'invoice' ? 'inv' : 'ms'}-view-manual`).classList.add('hidden');
+                document.getElementById(`${module === 'invoice' ? 'inv' : 'ms'}-view-bulk`).classList.remove('hidden');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            const icon = type === 'success' ? '<i class="ph-fill ph-check-circle text-green-500 text-xl"></i>' : 
+                         type === 'error' ? '<i class="ph-fill ph-warning-circle text-red-500 text-xl"></i>' : 
+                         '<i class="ph-fill ph-info text-brand-500 text-xl"></i>';
+                         
+            const border = type === 'success' ? 'border-green-100' : type === 'error' ? 'border-red-100' : 'border-brand-100';
+
+            toast.className = `glass bg-white flex items-center gap-3 py-3 px-4 rounded-xl shadow-lg border ${border} animate-slide-up pointer-events-auto transition-all duration-300 transform scale-100`;
+            toast.innerHTML = `
+                ${icon}
+                <span class="text-sm font-medium text-slate-700">${message}</span>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'scale-95', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // === STREAMING_CHUNK:Invoice Logic ===
+        function addInvoiceRow(desc = '', qty = 1, rate = 0, tax = 18) {
+            const tbody = document.getElementById('invoice-items');
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50/50 transition-colors group";
+            tr.innerHTML = `
+                <td class="p-3"><input type="text" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 transition-colors" placeholder="Item description" value="${desc}"></td>
+                <td class="p-3"><input type="number" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 transition-colors" min="1" value="${qty}" oninput="calcInvoiceTotal()"></td>
+                <td class="p-3"><input type="number" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 transition-colors" min="0" value="${rate}" oninput="calcInvoiceTotal()"></td>
+                <td class="p-3"><input type="number" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 transition-colors" min="0" value="${tax}" oninput="calcInvoiceTotal()"></td>
+                <td class="p-3 text-right">
+                    <button onclick="this.closest('tr').remove(); calcInvoiceTotal()" class="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all p-1 rounded-md hover:bg-red-50">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+            calcInvoiceTotal(false); // don't animate on add
+        }
+
+        function calcInvoiceTotal(animate = true) {
+            const rows = document.querySelectorAll('#invoice-items tr');
+            let sub = 0, taxTotal = 0;
+            
+            rows.forEach(r => {
+                const inputs = r.querySelectorAll('input');
+                if(inputs.length < 4) return;
+                const qty = parseFloat(inputs[1].value) || 0;
+                const rate = parseFloat(inputs[2].value) || 0;
+                const tax = parseFloat(inputs[3].value) || 0;
+                
+                const lineSub = qty * rate;
+                const lineTax = lineSub * (tax / 100);
+                
+                sub += lineSub;
+                taxTotal += lineTax;
+            });
+            
+            const totalEl = document.getElementById('inv-total');
+            document.getElementById('inv-subtotal').innerText = `₹ ${sub.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            document.getElementById('inv-tax').innerText = `₹ ${taxTotal.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            totalEl.innerText = `₹ ${(sub + taxTotal).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+            
+            if(animate) {
+                totalEl.classList.remove('val-updated');
+                void totalEl.offsetWidth; // trigger reflow
+                totalEl.classList.add('val-updated');
+            }
+        }
+
+        function resetInvoice() {
+            document.getElementById('invoice-items').innerHTML = '';
+            document.getElementById('result-inv').classList.add('hidden');
+            addInvoiceRow('Consultation Service', 5, 2000, 18);
+            showToast('Invoice form reset', 'info');
+        }
+
+        // === STREAMING_CHUNK:Marksheet Logic ===
+        function updateSubjectList() {
+            const list = document.getElementById('subject-list');
+            list.innerHTML = '';
+            subjects.forEach((sub, idx) => {
+                list.innerHTML += `
+                    <div class="flex items-center justify-between bg-white px-3 py-2 rounded-lg border border-slate-100 shadow-sm text-sm">
+                        <span class="font-mono text-slate-700">${sub}</span>
+                        <button onclick="removeSubject(${idx})" class="text-slate-400 hover:text-red-500"><i class="ph-bold ph-x"></i></button>
+                    </div>
+                `;
+            });
+            updateStudentHeaders();
+        }
+
+        function addSubject() {
+            const newSub = prompt("Enter Subject Code (e.g. PH101):");
+            if(newSub && newSub.trim() !== '') {
+                subjects.push(newSub.trim().toUpperCase());
+                updateSubjectList();
+            }
+        }
+
+        function removeSubject(idx) {
+            subjects.splice(idx, 1);
+            updateSubjectList();
+        }
+
+        function updateStudentHeaders() {
+            const headerRow = document.getElementById('ms-table-headers');
+            headerRow.innerHTML = `
+                <th class="p-4 w-32">Roll No</th>
+                <th class="p-4">Name</th>
+            `;
+            subjects.forEach(sub => {
+                headerRow.innerHTML += `<th class="p-4 w-24 text-center">${sub}</th>`;
+            });
+            headerRow.innerHTML += `<th class="p-4 w-12"></th>`;
+            
+            // Rebuild existing student rows to match new columns
+            const rows = document.querySelectorAll('#student-items tr');
+            rows.forEach(row => {
+                const inputs = Array.from(row.querySelectorAll('.mark-input')).map(inp => inp.value);
+                const roll = row.querySelector('.roll-input').value;
+                const name = row.querySelector('.name-input').value;
+                
+                let marksHtml = '';
+                subjects.forEach((_, i) => {
+                    marksHtml += `<td class="p-2"><input type="number" class="w-16 bg-white border border-slate-200 rounded-md text-sm px-2 py-1 text-center mark-input focus:border-brand-400 focus:outline-none" value="${inputs[i] || ''}"></td>`;
+                });
+                
+                row.innerHTML = `
+                    <td class="p-3"><input type="text" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 roll-input font-mono" value="${roll}"></td>
+                    <td class="p-3"><input type="text" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 name-input" value="${name}"></td>
+                    ${marksHtml}
+                    <td class="p-3 text-right">
+                        <button onclick="this.closest('tr').remove()" class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-md hover:bg-red-50"><i class="ph-bold ph-trash"></i></button>
+                    </td>
+                `;
+            });
+        }
+
+        function addStudent(roll = '', name = '', marks = []) {
+            const tbody = document.getElementById('student-items');
+            const tr = document.createElement('tr');
+            tr.className = "hover:bg-slate-50/50 transition-colors";
+            
+            let marksHtml = '';
+            subjects.forEach((_, i) => {
+                marksHtml += `<td class="p-2"><input type="number" class="w-16 bg-white border border-slate-200 rounded-md text-sm px-2 py-1 text-center mark-input focus:border-brand-400 focus:outline-none focus:ring-2 focus:ring-brand-100 transition-all" value="${marks[i] || ''}"></td>`;
+            });
+
+            tr.innerHTML = `
+                <td class="p-3"><input type="text" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 roll-input font-mono" placeholder="Roll No" value="${roll}"></td>
+                <td class="p-3"><input type="text" class="w-full bg-transparent border-b border-transparent focus:border-brand-300 focus:outline-none text-sm px-1 py-1 name-input" placeholder="Student Name" value="${name}"></td>
+                ${marksHtml}
+                <td class="p-3 text-right">
+                    <button onclick="this.closest('tr').remove()" class="text-slate-400 hover:text-red-500 transition-colors p-1 rounded-md hover:bg-red-50"><i class="ph-bold ph-trash"></i></button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        }
+
+        function resetMarksheet() {
+            subjects = ['CS101', 'MA101'];
+            updateSubjectList();
+            document.getElementById('student-items').innerHTML = '';
+            document.getElementById('result-ms').classList.add('hidden');
+            addStudent('2026-001', 'Alice Johnson', [85, 92]);
+            showToast('Marksheet data reset', 'info');
+        }
+
+        // === STREAMING_CHUNK:Drag & Drop and Processing Logic ===
+        function setupDragAndDrop(module) {
+            const dropzone = document.getElementById(`${module}-dropzone`);
+            const fileInput = document.getElementById(`${module}-file`);
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, preventDefaults, false);
+            });
+
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropzone.addEventListener(eventName, () => dropzone.classList.add('dropzone-active'), false);
+            });
+
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropzone.addEventListener(eventName, () => dropzone.classList.remove('dropzone-active'), false);
+            });
+
+            dropzone.addEventListener('drop', (e) => {
+                let dt = e.dataTransfer;
+                let files = dt.files;
+                handleFiles(files, module);
+            });
+
+            fileInput.addEventListener('change', function() {
+                handleFiles(this.files, module);
+            });
+        }
+
+        function handleFiles(files, module) {
+            if(files.length === 0) return;
+            const file = files[0];
+            
+            showToast(`Parsing ${file.name}...`, 'info');
+            setTimeout(() => {
+                if(module === 'inv') {
+                    document.getElementById('invoice-items').innerHTML = '';
+                    addInvoiceRow('Bulk Item 1 (Extracted)', 10, 150, 18);
+                    addInvoiceRow('Bulk Item 2 (Extracted)', 5, 300, 12);
+                    addInvoiceRow('Service Charge', 1, 1000, 18);
+                    showToast('Data extracted successfully!');
+                } else {
+                    document.getElementById('student-items').innerHTML = '';
+                    addStudent('B-001', 'Extracted Student A', [90, 88]);
+                    addStudent('B-002', 'Extracted Student B', [76, 81]);
+                    addStudent('B-003', 'Extracted Student C', [95, 91]);
+                    showToast('Class roster loaded successfully!');
+                }
+            }, 800);
+        }
+
+        function collectInvoicePayload() {
+            const items = Array.from(document.querySelectorAll('#invoice-items tr')).map(row => {
+                const inputs = row.querySelectorAll('input');
+                return {
+                    description: inputs[0].value || 'Professional Service',
+                    qty: parseFloat(inputs[1].value) || 1,
+                    rate: parseFloat(inputs[2].value) || 0,
+                    tax_pct: parseFloat(inputs[3].value) || 0,
+                    discount_pct: 0
+                };
+            }).filter(item => item.rate > 0);
+
+            return {
+                company: {
+                    name: document.getElementById('inv-co-name').value || "Anshita's Document Studio",
+                    tagline: 'AI, Cyber Security, Full Stack and Data Science Training',
+                    address: "Anshita's Document Studio",
+                    gstin: 'N/A',
+                    email: document.getElementById('inv-co-email').value || 'your-email@example.com',
+                    phone: '+91 00000 00000',
+                    website: '',
+                    bank_details: 'Bank details can be updated by the project owner.'
+                },
+                client: {
+                    name: document.getElementById('inv-cl-name').value || 'Client Organization',
+                    address: 'Client billing address',
+                    gstin: 'N/A',
+                    email: 'client@example.com',
+                    contact: 'Accounts Team'
+                },
+                meta: {
+                    invoice_no: document.getElementById('inv-no').value || 'INV-001',
+                    invoice_date: document.getElementById('inv-date').value || new Date().toISOString().split('T')[0],
+                    due_days: 30,
+                    place_of_supply: 'India',
+                    currency_symbol: 'Rs.',
+                    notes: "Thank you for choosing Anshita's Document Studio."
+                },
+                tax_mode: 'cgst_sgst',
+                line_items: items.length ? items : [{ description: 'Professional Service', qty: 1, rate: 1000, tax_pct: 18, discount_pct: 0 }]
+            };
+        }
+
+        function collectMarksheetPayload() {
+            const maxMarks = parseInt(document.getElementById('ms-max-marks').value) || 100;
+            const subjectPayload = subjects.map(code => ({
+                code,
+                name: code,
+                max_marks: maxMarks,
+                pass_marks: Math.ceil(maxMarks * 0.4),
+                credits: 4
+            }));
+
+            const students = Array.from(document.querySelectorAll('#student-items tr')).map((row, idx) => ({
+                roll_no: row.querySelector('.roll-input').value || `AS-${String(idx + 1).padStart(3, '0')}`,
+                name: row.querySelector('.name-input').value || `Student ${idx + 1}`,
+                father: '',
+                dob: '',
+                marks: Array.from(row.querySelectorAll('.mark-input')).map(input => parseInt(input.value) || 0)
+            }));
+
+            return {
+                institution: {
+                    name: document.getElementById('ms-inst').value || "Anshita's Learning Studio",
+                    logo_text: 'AS',
+                    subtitle: 'Automation Studio Academic Report',
+                    address: "Anshita's Document Studio",
+                    affiliation: "Anshita's Project",
+                    exam_name: 'Academic Performance Statement',
+                    program: 'Full Stack / AI Project Track',
+                    semester: 'Spring 2026'
+                },
+                subjects: subjectPayload,
+                students: students.length ? students : [{ roll_no: 'AS-001', name: 'Demo Student', father: '', dob: '', marks: subjectPayload.map(() => 75) }],
+                mode: 'all'
+            };
+        }
+
+        function renderDownloadCard(file, icon, tone, subtitle) {
+            return `
+                <a href="${file.download}" class="flex items-center gap-4 p-4 bg-white border border-slate-200 rounded-xl hover:border-brand-400 hover:shadow-md transition-all group">
+                    <div class="w-12 h-12 ${tone} rounded-lg flex items-center justify-center text-2xl group-hover:scale-110 transition-transform"><i class="${icon}"></i></div>
+                    <div class="min-w-0">
+                        <h4 class="font-bold text-slate-800 truncate">${file.filename}</h4>
+                        <p class="text-xs text-slate-500">${subtitle}</p>
+                    </div>
+                    <i class="ph-bold ph-download-simple ml-auto text-slate-400 group-hover:text-brand-600 transition-colors"></i>
+                </a>
+            `;
+        }
+
+        async function generateDocument(module) {
+            const btnId = `btn-gen-${module === 'invoice' ? 'inv' : 'ms'}`;
+            const progContainerId = `progress-${module === 'invoice' ? 'inv' : 'ms'}`;
+            const resultId = `result-${module === 'invoice' ? 'inv' : 'ms'}`;
+            const btn = document.getElementById(btnId);
+            const progContainer = document.getElementById(progContainerId);
+            const progBar = progContainer.querySelector('div');
+            const resultArea = document.getElementById(resultId);
+            
+            btn.disabled = true;
+            btn.classList.add('opacity-75', 'cursor-not-allowed');
+            progContainer.classList.remove('hidden');
+            resultArea.classList.add('hidden');
+            
+            let width = 0;
+            progBar.style.width = '0%';
+            
+            const interval = setInterval(() => {
+                width = Math.min(width + Math.random() * 18, 88);
+                progBar.style.width = width + '%';
+            }, 200);
+
+            try {
+                const endpoint = module === 'invoice' ? '/api/generate-invoice' : '/api/generate-marksheet';
+                const payload = module === 'invoice' ? collectInvoicePayload() : collectMarksheetPayload();
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await response.json();
+                if(!response.ok || data.status !== 'ok') throw new Error(data.message || 'Generation failed');
+
+                clearInterval(interval);
+                progBar.style.width = '100%';
+                setTimeout(() => {
+                    progContainer.classList.add('hidden');
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                    showResults(module, data);
+                    showToast(`${module === 'invoice' ? 'Invoice PDF' : 'Reports'} generated successfully!`, 'success');
+                }, 350);
+            } catch (error) {
+                clearInterval(interval);
+                progContainer.classList.add('hidden');
+                btn.disabled = false;
+                btn.classList.remove('opacity-75', 'cursor-not-allowed');
+                showToast(error.message, 'error');
+            }
+        }
+
+        function showResults(module, data) {
+            const resultArea = document.getElementById(`result-${module === 'invoice' ? 'inv' : 'ms'}`);
+            const downloadArea = document.getElementById(`download-${module === 'invoice' ? 'inv' : 'ms'}`);
+            
+            if(module === 'invoice') {
+                downloadArea.innerHTML = renderDownloadCard(data, 'ph-duotone ph-file-pdf', 'bg-red-100 text-red-600', 'Anshita branded invoice PDF');
+            } else if (module === 'marksheet') {
+                const tbody = document.getElementById('ms-preview-body');
+                tbody.innerHTML = '';
+                data.preview.forEach(st => {
+                    const isPass = st.result === 'PASS';
+                    const statusClass = isPass ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700';
+                    
+                    tbody.innerHTML += `
+                        <tr class="hover:bg-slate-50/50">
+                            <td class="p-2 font-mono text-xs">${st.roll_no}</td>
+                            <td class="p-2 font-medium text-slate-700">${st.name}</td>
+                            <td class="p-2 text-slate-600">${st.total}</td>
+                            <td class="p-2 font-bold ${isPass ? 'text-green-600' : 'text-red-600'}">${st.pct}%</td>
+                            <td class="p-2"><span class="px-2 py-1 text-[10px] font-bold rounded-full ${statusClass}">${st.result}</span></td>
+                        </tr>
+                    `;
+                });
+
+                downloadArea.innerHTML = data.files.map(file => {
+                    const isExcel = file.filename.endsWith('.xlsx');
+                    return renderDownloadCard(
+                        file,
+                        isExcel ? 'ph-duotone ph-microsoft-excel-logo' : 'ph-duotone ph-file-pdf',
+                        isExcel ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600',
+                        file.student || (isExcel ? 'Class summary workbook' : 'Student marksheet PDF')
+                    );
+                }).join('');
+            }
+            
+            resultArea.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>

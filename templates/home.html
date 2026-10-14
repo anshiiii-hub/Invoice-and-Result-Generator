@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anshita's Document Studio | Invoice & Result Generator</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eafaff',
+                            100: '#c8f3fb',
+                            400: '#38c7df',
+                            500: '#00a7c8',
+                            600: '#087f9c',
+                            700: '#075f75',
+                            900: '#071827',
+                        },
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'slide-up-fade': 'slideUpFade 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        slideUpFade: {
+                            '0%': { opacity: 0, transform: 'translateY(40px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: #f8fafc;
+            background-image: 
+                radial-gradient(at 0% 0%, hsla(228,100%,74%,0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(189,100%,56%,0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(355,100%,93%,0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(262,100%,74%,0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 32px -1px rgba(99, 102, 241, 0.15);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #00a7c8 0%, #071827 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Scroll Reveal Utility Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="text-slate-800 relative overflow-x-hidden">
+
+    <div class="fixed inset-0 w-full h-full pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-brand-400/30 rounded-full mix-blend-multiply filter blur-[100px] animate-blob"></div>
+        <div class="absolute top-[20%] right-[-10%] w-96 h-96 bg-cyan-400/20 rounded-full mix-blend-multiply filter blur-[100px] animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-[-20%] left-[20%] w-[500px] h-[500px] bg-purple-400/20 rounded-full mix-blend-multiply filter blur-[100px] animate-blob" style="animation-delay: 4s;"></div>
+    </div>
+
+    <header class="fixed top-0 w-full z-50 glass border-b border-white/50 transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <!-- Brand -->
+            <a href="#" class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white shadow-lg shadow-brand-500/30 group-hover:scale-105 transition-transform">
+                    <i class="ph-bold ph-robot text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="font-display font-bold text-xl leading-tight text-slate-900 tracking-tight">Anshita's <span class="text-brand-600">Studio</span></h1>
+                    <p class="text-[10px] font-semibold tracking-wider text-slate-500 uppercase">Invoice & Result Generator</p>
+                </div>
+            </a>
+            
+            <!-- Nav Links (Desktop) -->
+            <nav class="hidden md:flex items-center gap-8">
+                <a href="#features" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Features</a>
+                <a href="#about" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">About Project</a>
+                <a href="#about" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">About Project</a>
+                <a href="{{ url_for('page_report') }}" class="text-sm font-medium text-slate-600 hover:text-brand-600 transition-colors">Page Report</a>
+            </nav>
+
+            <!-- CTA -->
+            <a href="{{ url_for('index') }}" class="hidden md:flex items-center gap-2 px-5 py-2.5 bg-slate-900 hover:bg-brand-600 text-white rounded-full text-sm font-medium transition-all hover:shadow-lg hover:-translate-y-0.5">
+                Launch Workspace <i class="ph-bold ph-arrow-right"></i>
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-slate-600 p-2">
+                <i class="ph-bold ph-list text-2xl"></i>
+            </button>
+        </div>
+    </header>
+
+    <main class="relative z-10 pt-20">
+        
+        <section class="min-h-[90vh] flex items-center justify-center pt-10 pb-20 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+                
+                <!-- Hero Text -->
+                <div class="text-center lg:text-left animate-slide-up-fade">
+                    
+                    <h1 class="text-5xl lg:text-7xl font-display font-bold text-slate-900 tracking-tight leading-[1.1] mb-6">
+                        Anshita's <br>
+                        <span class="text-gradient">Document Studio.</span>
+                    </h1>
+                    
+                    <p class="text-lg text-slate-600 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">
+                        A polished advanced project for generating branded invoices, ranked academic marksheets, PDF downloads, Excel class summaries, and page-copy reports from one clean Flask workspace.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
+                        <a href="{{ url_for('index') }}" class="w-full sm:w-auto px-8 py-4 bg-brand-600 hover:bg-brand-700 text-white rounded-2xl text-base font-bold shadow-xl shadow-brand-500/30 transition-all hover:-translate-y-1 flex items-center justify-center gap-2">
+                            Open Workspace <i class="ph-bold ph-rocket-launch"></i>
+                        </a>
+                        <a href="#features" class="w-full sm:w-auto px-8 py-4 glass hover:bg-white/80 rounded-2xl text-slate-700 text-base font-bold transition-all flex items-center justify-center gap-2">
+                            View Features
+                        </a>
+                        <a href="{{ url_for('page_report') }}" class="w-full sm:w-auto px-8 py-4 bg-white/80 hover:bg-white rounded-2xl text-slate-700 text-base font-bold transition-all border border-white/70 flex items-center justify-center gap-2">
+                            Page Report <i class="ph-bold ph-file-text"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Hero Visual (Abstract App Representation) -->
+                <div class="relative hidden lg:block animate-float">
+                    <!-- Main Dashboard Card -->
+                    <div class="glass p-6 rounded-3xl border border-white/60 shadow-2xl relative z-20 bg-white/40 backdrop-blur-xl">
+                        <div class="flex items-center gap-3 mb-6 border-b border-slate-200/50 pb-4">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                            <div class="text-xs font-medium text-slate-400 font-mono flex-1 text-center pr-8">workspace/generate.pdf</div>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div class="h-8 w-1/3 bg-slate-200/60 rounded-lg animate-pulse"></div>
+                            <div class="h-4 w-1/2 bg-slate-200/60 rounded-md animate-pulse"></div>
+                            <div class="py-4">
+                                <div class="flex gap-4 mb-3">
+                                    <div class="h-10 w-full bg-brand-100/50 rounded-xl"></div>
+                                    <div class="h-10 w-full bg-brand-100/50 rounded-xl"></div>
+                                </div>
+                                <div class="h-24 w-full bg-white/50 border border-slate-100 rounded-xl mb-4"></div>
+                                <div class="h-12 w-full bg-brand-500 rounded-xl flex items-center justify-center text-white/90 text-sm font-bold shadow-lg shadow-brand-500/20">
+                                    Generate Document
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Floating decorative elements -->
+                    <div class="absolute -right-8 -top-8 p-4 glass rounded-2xl shadow-xl z-30 animate-bounce" style="animation-duration: 3s;">
+                        <i class="ph-duotone ph-file-pdf text-4xl text-red-500"></i>
+                    </div>
+                    <div class="absolute -left-12 bottom-12 p-4 glass rounded-2xl shadow-xl z-30 animate-bounce" style="animation-delay: 1.5s; animation-duration: 4s;">
+                        <i class="ph-duotone ph-graduation-cap text-4xl text-brand-600"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="features" class="py-24 px-4 sm:px-6 lg:px-8 relative z-10 bg-white/30 border-y border-white/50">
+            <div class="max-w-7xl mx-auto">
+                <div class="text-center mb-16 reveal">
+                    <h2 class="text-sm font-bold text-brand-600 tracking-widest uppercase mb-2">Core Features</h2>
+                    <h3 class="text-3xl md:text-4xl font-display font-bold text-slate-900">Advanced document automation, ready for demos.</h3>
+                </div>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="glass-card p-8 rounded-3xl reveal">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="ph-duotone ph-receipt"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-3">Smart Invoicing</h4>
+                        <p class="text-slate-600 leading-relaxed">Generate personalized, tax-aware invoice PDFs with line items, live totals, due dates, client details, and polished branded output.</p>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="glass-card p-8 rounded-3xl reveal" style="transition-delay: 100ms;">
+                        <div class="w-14 h-14 rounded-2xl bg-brand-100 text-brand-600 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="ph-duotone ph-exam"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-3">Academic Marksheets</h4>
+                        <p class="text-slate-600 leading-relaxed">Automate student result generation with percentages, grades, CGPA, ranks, pass/fail status, and downloadable marksheet PDFs.</p>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="glass-card p-8 rounded-3xl reveal" style="transition-delay: 200ms;">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mb-6 shadow-inner">
+                            <i class="ph-duotone ph-file-csv"></i>
+                        </div>
+                        <h4 class="text-xl font-bold text-slate-900 mb-3">Bulk Processing</h4>
+                        <p class="text-slate-600 leading-relaxed">Prepare class-level summaries with structured Excel output and a preview table designed for quick academic review.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="max-w-5xl mx-auto">
+                <div class="glass p-8 md:p-12 rounded-[2.5rem] border border-brand-200 shadow-2xl relative overflow-hidden reveal">
+                    
+                    <!-- Decorative Background element -->
+                    <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3"></div>
+
+                    <div class="grid md:grid-cols-5 gap-8 items-center relative z-10">
+                        <div class="md:col-span-3">
+                            <div class="flex items-center gap-2 mb-4">
+                                <i class="ph-fill ph-student text-brand-500 text-xl"></i>
+                                <span class="text-sm font-bold text-slate-500 uppercase tracking-wider">Mentorship & Guidance</span>
+                            </div>
+                            <h2 class="text-3xl md:text-4xl font-display font-bold text-slate-900 mb-6">Built for <span class="text-brand-600">Anshita's workflow</span></h2>
+                            <p class="text-slate-600 text-lg leading-relaxed mb-6">
+                                This platform was developed as a personalized automation project to solve real administrative bottlenecks. It brings your home page, workspace, generated documents, and project report together in one consistent experience.
+                            </p>
+                            <ul class="space-y-3 mb-8">
+                                <li class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm"><i class="ph-bold ph-check"></i></div>
+                                    Focus on User Experience (UX)
+                                </li>
+                                <li class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm"><i class="ph-bold ph-check"></i></div>
+                                    Modern Frontend Architecture
+                                </li>
+                                <li class="flex items-center gap-3 text-slate-700 font-medium">
+                                    <div class="w-6 h-6 rounded-full bg-green-100 text-green-600 flex items-center justify-center text-sm"><i class="ph-bold ph-check"></i></div>
+                                    Practical Data Automation
+                                </li>
+                            </ul>
+                            <a href="{{ url_for('index') }}" class="inline-flex items-center gap-2 text-brand-600 font-bold hover:text-brand-800 transition-colors">
+                                Open your workspace <i class="ph-bold ph-arrow-right"></i>
+                            </a>
+                        </div>
+                        
+                        <div class="md:col-span-2 flex justify-center">
+                            <div class="w-48 h-48 md:w-64 md:h-64 rounded-full bg-white shadow-xl border-4 border-white flex flex-col items-center justify-center relative transform -rotate-3 hover:rotate-0 transition-transform duration-500">
+                                <div class="text-4xl font-serif font-bold text-brand-600 tracking-tighter mb-1">AS</div>
+                                <div class="text-sm font-bold text-slate-800 tracking-widest uppercase text-center leading-tight">Anshita's<br>Document Studio</div>
+                                <div class="text-[9px] text-slate-400 mt-2 text-center px-4">Invoices • Results • Reports</div>
+                                
+                                <!-- Decorative badges -->
+                                <div class="absolute -right-4 -top-4 w-12 h-12 bg-yellow-400 rounded-full flex items-center justify-center text-white shadow-lg shadow-yellow-400/40 text-xl border-2 border-white">
+                                    <i class="ph-fill ph-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="py-20 text-center px-4 relative z-10 reveal">
+            <h2 class="text-3xl font-display font-bold text-slate-900 mb-6">Ready to streamline your work?</h2>
+            <p class="text-slate-600 mb-8">Jump into the immersive workspace and start generating documents.</p>
+            <a href="{{ url_for('index') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-slate-900 hover:bg-brand-600 text-white rounded-full text-lg font-bold transition-all shadow-xl hover:shadow-brand-500/30 hover:-translate-y-1">
+                Go to Workspace <i class="ph-bold ph-arrow-right"></i>
+            </a>
+        </section>
+
+    </main>
+
+    <footer class="glass border-t border-white/50 pt-16 pb-8 px-4 sm:px-6 lg:px-8 relative z-10 mt-10">
+        <div class="max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+                <div class="md:col-span-2">
+                    <h3 class="font-display font-bold text-xl text-slate-900 mb-2">Anshita's <span class="text-brand-600">Document Studio</span></h3>
+                    <p class="text-sm text-slate-500 leading-relaxed mb-6 max-w-sm">
+                        A focused workspace for creating invoices, academic results, and professional reports with less manual work.
+                    </p>
+                    <div class="flex flex-wrap gap-4 text-sm font-semibold text-slate-500">
+                        <span class="inline-flex items-center gap-2"><i class="ph-bold ph-heart text-brand-500"></i> Made by Anshita</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4">Important Links</h4>
+                    <ul class="space-y-2 text-sm text-slate-600">
+                        <li><a href="#about" class="hover:text-brand-600 transition-colors">About this project</a></li>
+                        <li><a href="{{ url_for('index') }}" class="hover:text-brand-600 transition-colors">Launch Workspace</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-slate-900 mb-4">Personal workspace</h4>
+                    <p class="text-sm text-slate-500 leading-relaxed mb-4">
+                        A personal project space designed around Anshita's document workflow.
+                    </p>
+                    <a href="{{ url_for('index') }}" class="text-sm font-semibold text-brand-600 hover:underline">Open the workspace &rarr;</a>
+                </div>
+            </div>
+            
+            <div class="border-t border-slate-200/60 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="text-xs text-slate-500">&copy; 2026 Student Project. Built for educational purposes.</p>
+                <div class="text-xs text-slate-500 flex items-center gap-1">
+                    Made with <i class="ph-fill ph-heart text-red-500"></i> under guidance.
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Sticky Navbar Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 20) {
+                nav.classList.add('shadow-sm', 'bg-white/80');
+                nav.classList.remove('bg-transparent');
+            } else {
+                nav.classList.remove('shadow-sm', 'bg-white/80');
+            }
+        });
+
+        // Scroll Reveal Animation
+        function reveal() {
+            const reveals = document.querySelectorAll('.reveal');
+            for (let i = 0; i < reveals.length; i++) {
+                const windowHeight = window.innerHeight;
+                const elementTop = reveals[i].getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        
+        window.addEventListener('scroll', reveal);
+        // Trigger once on load
+        reveal();
+    </script>
+</body>
+</html>
